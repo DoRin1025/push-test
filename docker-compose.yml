@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  web:
+    image: registry.ismartapps.com.au:5000/push-dev:1
+    build: .
+    ports:
+      - "5000:80"
+      - "5001:443"
+    volumes:
+      - type: bind
+        source: ./logs/
+        target: /logs
+      - type: bind
+        source: ./certs/users
+        target: /app/certs
+    restart: always
+    depends_on:
+      - db
+      - redis
+  db:
+    image: postgres:13-alpine
+    env_file:
+      - ./sql/database.envl
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./sql/init_post.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+  redis:
+    image: redis:6.2.1-alpine
+    ports:
+      - "6379:6379"
+    restart: always

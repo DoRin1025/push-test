@@ -1,0 +1,3 @@
+POSTGRES_USER=push_user
+POSTGRES_PASSWORD=cappezela11
+POSTGRES_DB=push_db
